@@ -21,8 +21,9 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const url = typeof body?.url === "string" ? body.url.trim() : "";
-    const fetchAssets = body?.fetchAssets !== false;
-    const maxAssets = typeof body?.maxAssets === "number" ? body.maxAssets : 40;
+    const maxPages = typeof body?.maxPages === "number" ? body.maxPages : 1;
+    const maxFiles = typeof body?.maxFiles === "number" ? body.maxFiles : 400;
+    const stripScripts = body?.stripScripts === true;
 
     if (!url) {
       return NextResponse.json({ error: "url is required" }, { status: 400 });
@@ -42,9 +43,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Local/private hosts are blocked" }, { status: 400 });
     }
 
-    const result = await clonePage(url, { fetchAssets, maxAssets });
+    const result = await clonePage(url, { maxPages, maxFiles, stripScripts });
 
-    if (result.error && !result.html) {
+    if (result.error) {
       return NextResponse.json({ error: result.error, status: result.status }, { status: 502 });
     }
 
