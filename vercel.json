@@ -1,0 +1,12 @@
+{
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "functions": {
+    "src/app/api/clone/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/proxy/route.ts": {
+      "maxDuration": 25
+    }
+  }
+}
