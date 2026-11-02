@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import * as cheerio from "cheerio";
+import type { Element } from "domhandler";
 
 export type AssetRecord = {
   type: string;
@@ -260,7 +261,7 @@ export async function clonePage(
     }
 
     // Collect + rewrite resource URLs
-    const assetUrls: { type: string; url: string; attr: string; el: cheerio.Element }[] = [];
+    const assetUrls: { type: string; url: string; attr: string; el: Element }[] = [];
 
     $("link[href], script[src], img[src], source[src], video[src], audio[src], iframe[src], embed[src], object[data]").each(
       (_, el) => {

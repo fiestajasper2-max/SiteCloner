@@ -102,9 +102,7 @@ export default function Home() {
     if (!result) return;
     setZipping(true);
     try {
-      // dynamic import jszip via CDN to avoid extra dependency
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const JSZip = (await import(/* webpackIgnore: true */ "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm")).default as any;
+      const JSZip = (await import("jszip")).default;
       const zip = new JSZip();
       zip.file("index.html", result.offlineHtml || result.html);
       zip.file(
