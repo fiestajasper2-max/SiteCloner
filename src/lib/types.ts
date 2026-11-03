@@ -1,3 +1,4 @@
+
 export type ApiEndpoint = {
   method: string;
   path: string;
@@ -5,7 +6,15 @@ export type ApiEndpoint = {
   sampleUrl?: string;
 };
 
-export type FileKind = "html" | "css" | "js" | "img" | "font" | "media" | "icon" | "other";
+export type FileKind =
+  | "html"
+  | "css"
+  | "js"
+  | "img"
+  | "font"
+  | "media"
+  | "icon"
+  | "other";
 
 export type ClonedPage = {
   url: string;
@@ -26,7 +35,11 @@ export type RemoteFile = {
   kind: FileKind;
 };
 
-export type CloneForm = { method: string; action: string; inputs: string[] };
+export type CloneForm = {
+  method: string;
+  action: string;
+  inputs: string[];
+};
 
 export type ServiceCategory =
   | "database"
@@ -45,16 +58,13 @@ export type DetectedService = {
   name: string;
   category: ServiceCategory;
   evidence: string;
-  /** true when guessed from framework conventions rather than seen directly */
   inferred?: boolean;
 };
 
 export type EnvVar = {
   key: string;
-  /** only set for values already shipped publicly in the site's frontend */
   value?: string;
   placeholder?: string;
-  /** exposed to the browser (publishable) vs. server-only secret */
   public: boolean;
   group: string;
   note?: string;
@@ -79,7 +89,18 @@ export type BackendCapture = {
   headers: Record<string, string>;
 };
 
-/** One page cloned by a single /api/clone request. */
+/**
+ * Options for cloning a website.
+ */
+export type CloneOptions = {
+  maxPages?: number;
+  maxFiles?: number;
+  stripScripts?: boolean;
+};
+
+/**
+ * One page cloned by a single /api/clone request.
+ */
 export type PageCloneResult = {
   url: string;
   rootUrl: string;
@@ -109,23 +130,40 @@ export type CloneStats = {
   textBytes: number;
 };
 
-/** Whole-site result aggregated on the client from many page clones. */
+/**
+ * Whole-site result aggregated on the client
+ * from multiple page clones.
+ */
 export type CloneResult = {
   url: string;
   title: string;
   status: number;
+  contentType?: string;
+  error?: string;
+
   meta: Record<string, string>;
+
   pages: ClonedPage[];
   textFiles: TextFile[];
   remoteFiles: RemoteFile[];
   forms: CloneForm[];
   apiEndpoints: ApiEndpoint[];
-  backend: BackendCapture;
-  uncrawled: { url: string; path: string }[];
+
+  proxyMap?: Record<string, string>;
+
+  backend?: BackendCapture;
+  uncrawled?: {
+    url: string;
+    path: string;
+  }[];
+
   warnings: string[];
   stats: CloneStats;
 };
 
+/**
+ * Options for cloning an individual page.
+ */
 export type PageCloneOptions = {
   rootUrl?: string;
   discover?: boolean;
